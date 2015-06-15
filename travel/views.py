@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.views.generic import DetailView
+from travel.models import Segment
 
-# Create your views here.
+
+class SegmentView(DetailView):
+    model = Segment

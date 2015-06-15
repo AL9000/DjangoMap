@@ -1,3 +1,6 @@
 from django.contrib import admin
+from travel.models import Milestone, Segment
 
-# Register your models here.
+
+admin.site.register(Milestone)
+admin.site.register(Segment)
