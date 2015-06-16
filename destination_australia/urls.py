@@ -4,8 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    # url(r'^', include('website.urls', namespace='website')),
-    url(r'^voyage/', include('travel.urls', namespace='travel')),
+    url(r'^', include('travel.urls', namespace='travel')),
 
     url(r'^admin/', include(admin.site.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
