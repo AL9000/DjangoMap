@@ -61,3 +61,6 @@ target/
 
 # db
 db.sqlite3
+
+# static files, run collectstatic to populate this folder
+static/
