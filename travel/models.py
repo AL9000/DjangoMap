@@ -32,3 +32,10 @@ class Segment(models.Model):
                 break
             self.slug = '%s-%d' % (orig, x)
         super(Segment, self).save(*args, **kwargs)
+
+
+class Comment(models.Model):
+    content = models.TextField()
+    segment = models.ForeignKey(Segment)
+    user = models.CharField(max_length=25)
+    pub_date = models.DateTimeField(auto_now_add=True)

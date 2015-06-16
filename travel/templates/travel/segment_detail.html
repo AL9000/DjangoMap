@@ -1,3 +1,6 @@
 <h1>{{ segment }}</h1>
 <p>{{ segment.text }}</p>
 <img src="{{ segment.photo.url }}" height="100px"/>
+{% for comment in segment.comment_set.all %}
+    <p>Commentaire écrit par {{ comment.user }} : {{ comment.content }}</p>
+{% endfor %}

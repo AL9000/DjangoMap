@@ -32,13 +32,70 @@
     <div class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;">
         <h1 class="travel_title">Destination Australia</h1>
         <h2 class="travel_title">Nos étapes</h2>
+        <p>Tu peux cliquer sur les marqueurs de la carte ou bien directement dans la liste ci-dessous pour nous laisser des commentaire (n'hésite pas ça fait toujours plaisir :)</p>
         <div class="list-group">
             {% for segment in segment_list %}
-                <a href="#" class="list-group-item" onclick="test({{ forloop.counter0 }});">{# TODO active #}
+                <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">{# TODO active #}
                     <img src="{{ segment.photo.url }}" style="height: 70px;{% if forloop.counter|divisibleby:'2' %}float:left;margin-right: 5px;{% else %}float:right;margin-left: 5px;{% endif %}">
                     <h4 class="list-group-item-heading">{{ segment }} <small>le {{ segment.end_date }}</small></h4>
                     <p class="list-group-item-text" style="text-align: justify;">{{ segment.text|truncatechars:'100' }}</p>
                 </a>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">{{ segment }} <small>le {{ segment.end_date }}</small></h4>
+                            </div>
+                            <div class="modal-body">
+                                <img src="{{ segment.photo.url }}" style="width: 100%;margin-bottom: 10px;">
+                                <p class="text-primary" style="text-align: justify;margin-bottom: 10px;">{{ segment.text }}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <h4>Commentaires</h4>
+                                {% for comment in segment.comment_set.all %}
+                                    <div class="well well-sm">
+                                        <p class="small text-muted">Commentaire posté par <b>{{ comment.user }}</b> le {{ comment.pub_date }}</p>
+                                        <p class="text-primary">{{ comment.content }}</p>
+                                    </div>
+                                {% endfor %}
+                                <form method="post" action="{% url 'travel:segment_comment' segment.slug %}" class="form-horizontal">
+                                    {% if form.subject.errors %}
+                                        <ol>
+                                            {% for error in form.subject.errors %}
+                                                <li><strong>{{ error|escape }}</strong></li>
+                                            {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <h2 class="panel-title">Commenter</h2>
+                                        </div>
+                                        <div class="panel-body">
+                                            <fieldset>
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label for="user" class="col-lg-2 control-label">Ton nom</label>
+                                                    <div class="col-lg-10">
+                                                        <input id="user" type="text" name="user" class="form-control" >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="content" class="col-lg-2 control-label">Message</label>
+                                                    <div class="col-lg-10">
+                                                        <textarea id="content" name="content" class="form-control" rows="3"></textarea>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary form-control">Commenter</button>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>
@@ -85,6 +142,7 @@
                     title: '{{ segment }}',
                     image: '{{ segment.photo.url }}',
                     date: '{{ segment.end_date }}',
+                    slug: '{{ segment.slug }}',
                     data: '{{ segment.text|escapejs }}'});
             {% endfor %}
             latitude_depart = {{ segment_list.first.start_milestone.latitude|safe }};
@@ -115,10 +173,12 @@
                 });
                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
                     return function() {
+                        console.log(markers[i]['slug']);
                         infowindow.setContent('<div id="content">' +
                         '<h2 id="firstHeading" class="firstHeading">' + markers[i]['title'] + ' <small>le ' + markers[i]['date'] + '</small></h2>' +
-                        '<img src="' + markers[i]['image'] +'" style="width:100px;float:left;margin:10px;"">' +
-                        '<div id="bodyContent" style="text-align: justify;">' + markers[i]['data'] + '<br><br><a class="btn btn-warning" href="#" role="button">Commenter</a>' + '</div>');
+                        '<img src="' + markers[i]['image'] +'" style="width:100px;float:left;margin:0 10px 10px 0;"">' +
+                        '<div id="bodyContent" style="text-align: justify;">' + markers[i]['data'] + '</div>'+
+                        '<p class="text-warning">Pour laisser un commentaire, clique sur cette étape dans la liste de gauche !</p>' + '</div>');
                         infowindow.open(map, marker);
                     }
                 })(marker, i));
