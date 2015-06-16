@@ -18,7 +18,7 @@ class Segment(models.Model):
     end_milestone = models.ForeignKey(Milestone, related_name="end")
     end_date = models.DateTimeField()
     text = models.TextField()
-    photo = models.ImageField(upload_to='photos/')
+    photo = models.ImageField(upload_to='photos/', )
 
     slug = models.SlugField(max_length=100, unique=True, blank=True)
 
