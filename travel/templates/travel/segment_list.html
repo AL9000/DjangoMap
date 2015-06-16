@@ -36,7 +36,7 @@
             {% for segment in segment_list %}
                 <a href="#" class="list-group-item" onclick="test({{ forloop.counter0 }});">{# TODO active #}
                     <img src="{{ segment.photo.url }}" style="height: 70px;{% if forloop.counter|divisibleby:'2' %}float:left;margin-right: 5px;{% else %}float:right;margin-left: 5px;{% endif %}">
-                    <h4 class="list-group-item-heading">{{ segment }}</h4>
+                    <h4 class="list-group-item-heading">{{ segment }} <small>le {{ segment.end_date }}</small></h4>
                     <p class="list-group-item-text" style="text-align: justify;">{{ segment.text|truncatechars:'100' }}</p>
                 </a>
             {% endfor %}
@@ -84,6 +84,7 @@
                     map: map,
                     title: '{{ segment }}',
                     image: '{{ segment.photo.url }}',
+                    date: '{{ segment.end_date }}',
                     data: '{{ segment.text|escapejs }}'});
             {% endfor %}
             latitude_depart = {{ segment_list.first.start_milestone.latitude|safe }};
@@ -115,7 +116,7 @@
                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
                     return function() {
                         infowindow.setContent('<div id="content">' +
-                        '<h2 id="firstHeading" class="firstHeading">' + markers[i]['title'] + '</h2>' +
+                        '<h2 id="firstHeading" class="firstHeading">' + markers[i]['title'] + ' <small>le ' + markers[i]['date'] + '</small></h2>' +
                         '<img src="' + markers[i]['image'] +'" style="width:100px;float:left;margin:10px;"">' +
                         '<div id="bodyContent" style="text-align: justify;">' + markers[i]['data'] + '<br><br><a class="btn btn-warning" href="#" role="button">Commenter</a>' + '</div>');
                         infowindow.open(map, marker);

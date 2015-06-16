@@ -14,9 +14,9 @@ class Milestone(models.Model):
 
 class Segment(models.Model):
     start_milestone = models.ForeignKey(Milestone, related_name="start")
-    start_date = models.DateTimeField()
     end_milestone = models.ForeignKey(Milestone, related_name="end")
     end_date = models.DateTimeField()
+    pub_date = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     photo = models.ImageField(upload_to='photos/', )
 
