@@ -2,7 +2,7 @@ body, html, #map {
     height: 100%;
     width: 100%;
 }
-#etape_title {
+.travel_title {
     margin: 0;
     padding: 10px 0 10px 0;
     text-align: center;

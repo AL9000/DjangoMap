@@ -29,9 +29,9 @@
 <body>
 
 <div class="row" style="height: 100%;margin: 0 !important;padding: 0 !important;">
-    <div class="col-md-3" style="margin-top: 0 !important;padding: 2px !important;">
-        <h1>Destination Australia</h1>
-        <h2 id="etape_title">Nos étapes</h2>
+    <div class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;">
+        <h1 class="travel_title">Destination Australia</h1>
+        <h2 class="travel_title">Nos étapes</h2>
         <div class="list-group">
             {% for segment in segment_list %}
                 <a href="#" class="list-group-item" onclick="test({{ forloop.counter0 }});">{# TODO active #}
@@ -42,7 +42,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="col-md-9" style="height: 100%;margin: 0 !important;padding: 0 !important;">
+    <div class="col-sm-8 col-md-9" style="height: 100%;margin: 0 !important;padding: 0 !important;">
         <div id="map"></div>
     </div>
 </div>
@@ -50,10 +50,10 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 <script>
@@ -126,13 +126,6 @@
             init = true;
         }
     });
-    function test(x) {
-        alert('coucou');
-        var latLng = markers.getById(x).getPosition(); // returns LatLng object
-        map.setCenter(latLng); // setCenter takes a LatLng object
-        var infoWindow = marker.infoWindow; // retrieve the InfoWindow object
-        infoWindow.open(map); // Trigger the "open()" method
-    }
 </script>
 </body>
 </html>
