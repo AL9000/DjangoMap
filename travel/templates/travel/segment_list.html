@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Le site de notre voyage direction l'Australie !">
+    <meta name="author" content="Al Ouest">
     {# TODO favicon #}
     <link rel="icon" href="../../favicon.ico">
     <title>{% block title %}Destination Australia{% endblock %}</title>
@@ -29,10 +29,10 @@
 <body>
 
 <div class="row" style="height: 100%;margin: 0 !important;padding: 0 !important;">
-    <div class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;">
-        <h1 class="travel_title">Destination Australia</h1>
+    <div class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;overflow-y:auto;height: 100%;">
+        <h1 class="travel_title" style="color: #FB7064;">Destination Australia</h1>
         <h2 class="travel_title">Nos étapes</h2>
-        <p>Tu peux cliquer sur les marqueurs de la carte ou bien directement dans la liste ci-dessous pour nous laisser des commentaire (n'hésite pas ça fait toujours plaisir :)</p>
+        <p class="text-info">Tu peux cliquer sur les marqueurs de la carte ou bien directement dans la liste ci-dessous pour nous laisser des commentaire (n'hésite pas ça fait toujours plaisir :)</p>
         <div class="list-group">
             {% for segment in segment_list %}
                 <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">{# TODO active #}
@@ -51,8 +51,7 @@
                             <div class="modal-body">
                                 <img src="{{ segment.photo.url }}" style="width: 100%;margin-bottom: 10px;">
                                 <p class="text-primary" style="text-align: justify;margin-bottom: 10px;">{{ segment.text }}</p>
-                            </div>
-                            <div class="modal-footer">
+
                                 <h4>Commentaires</h4>
                                 {% for comment in segment.comment_set.all %}
                                     <div class="well well-sm">
@@ -92,6 +91,9 @@
                                         </div>
                                     </div>
                                 </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
                             </div>
                         </div>
                     </div>

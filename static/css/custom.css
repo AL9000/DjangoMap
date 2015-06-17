@@ -10,3 +10,6 @@ body, html, #map {
 h2 {
     margin: 0 0 10px 0;
 }
+a.list-group-item {
+    min-height: 90px;
+}
