@@ -64,3 +64,6 @@ db.sqlite3
 
 # static files, run collectstatic to populate this folder
 static/
+
+# media files
+media/
