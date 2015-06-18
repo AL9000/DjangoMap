@@ -6,5 +6,7 @@ from django.conf import settings
 urlpatterns = [
     url(r'^', include('travel.urls', namespace='travel')),
 
+    url('^markdown/', include('django_markdown.urls')),
+
     url(r'^admin/', include(admin.site.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # TODO Remove for production

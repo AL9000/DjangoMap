@@ -1,6 +1,7 @@
 {% load static %}
+{% load django_markdown %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +9,7 @@
     <meta name="description" content="Le site de notre voyage direction l'Australie !">
     <meta name="author" content="Al Ouest">
     {# TODO favicon #}
-    <link rel="icon" href="../../favicon.ico">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
     <title>{% block title %}Destination Australia{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
@@ -27,18 +28,20 @@
 
 </head>
 <body>
-
 <div class="row" style="height: 100%;margin: 0 !important;padding: 0 !important;">
     <div class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;overflow-y:auto;height: 100%;">
         <h1 class="travel_title" style="color: #FB7064;">Destination Australia</h1>
-        <h2 class="travel_title">Nos étapes</h2>
-        <p class="text-info">Tu peux cliquer sur les marqueurs de la carte ou bien directement dans la liste ci-dessous pour nous laisser des commentaire (n'hésite pas ça fait toujours plaisir :)</p>
+        <h2 class="travel_title">Milestones</h2>
+        <p class="text-info text-justify">Click on map's marker or on the list below to add comments (go ahead, it's always a pleasure to have some :)</p>
+        {# Clique sur les marqueurs de la carte ou dans la liste ci-dessous pour nous laisser des commentaire (n'hésite pas ça fait toujours plaisir :) #}
         <div class="list-group">
-            {% for segment in segment_list %}
-                <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">{# TODO active #}
-                    <img src="{{ segment.photo.url }}" style="height: 70px;{% if forloop.counter|divisibleby:'2' %}float:left;margin-right: 5px;{% else %}float:right;margin-left: 5px;{% endif %}">
-                    <h4 class="list-group-item-heading">{{ segment }} <small>le {{ segment.end_date }}</small></h4>
-                    <p class="list-group-item-text" style="text-align: justify;">{{ segment.text|truncatechars:'100' }}</p>
+            {% for milestone in milestone_list %}
+                <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">
+                    {% if milestone.photos.first.photo %}
+                        <img src="{{ milestone.photos.first.photo.url }}" style="height: 70px;{% if forloop.counter|divisibleby:'2' %}float:left;margin-right: 5px;{% else %}float:right;margin-left: 5px;{% endif %}">
+                    {% endif %}
+                    <h4 class="list-group-item-heading">{{ milestone }} <small> {{ milestone.arrival_date }}</small></h4>
+                    <p class="list-group-item-text text-justify">{{ milestone.text|truncatechars:'100'|markdown }}</p>
                 </a>
                 <!-- Modal -->
                 <div class="modal fade" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -46,20 +49,25 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">{{ segment }} <small>le {{ segment.end_date }}</small></h4>
+                                <h4 class="modal-title" id="myModalLabel">{{ milestone }} <small>le {{ milestone.arrival_date }}</small></h4>
                             </div>
                             <div class="modal-body">
-                                <img src="{{ segment.photo.url }}" style="width: 100%;margin-bottom: 10px;">
-                                <p class="text-primary" style="text-align: justify;margin-bottom: 10px;">{{ segment.text }}</p>
-
+                                {% if milestone.photos %}
+                                    {% for photo in milestone.photos.all %}
+                                        <img src="{{ photo.photo.url }}" style="width: 100%;margin-bottom: 10px;">
+                                    {% endfor %}
+                                {% endif %}
+                                <p class="text-justify" style="margin-bottom: 10px;">{{ milestone.text|markdown }}</p>
+                                <hr>
                                 <h4>Commentaires</h4>
-                                {% for comment in segment.comment_set.all %}
+                                {% for comment in milestone.comments.all %}
                                     <div class="well well-sm">
                                         <p class="small text-muted">Commentaire posté par <b>{{ comment.user }}</b> le {{ comment.pub_date }}</p>
-                                        <p class="text-primary">{{ comment.content }}</p>
+                                        <p class="text-primary">{{ comment.content|markdown }}</p>
                                     </div>
                                 {% endfor %}
-                                <form method="post" action="{% url 'travel:segment_comment' segment.slug %}" class="form-horizontal">
+                                {# TODO Handle form error in same page #}
+                                <form method="post" action="{% url 'travel:milestone_comment' milestone.slug %}" class="form-horizontal">
                                     {% if form.subject.errors %}
                                         <ol>
                                             {% for error in form.subject.errors %}
@@ -109,10 +117,10 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 <script>
     /* Ce code est vraiment ... ouais, je reprend ça quand j'ai le temps :-| */
@@ -131,25 +139,23 @@
             var waypts = [];
             var markers = [];
             map = new google.maps.Map(document.getElementById("map"), myOptions);
-            {% for segment in segment_list %}
-                {% if segment != segment_list.last %}
-                    waypts.push({
-                        location:new google.maps.LatLng({{ segment.end_milestone.latitude|safe }}, {{ segment.end_milestone.longitude|safe }}),
-                        stopover:true});
-                {% endif %}
+            {% for milestone in milestone_list %}
+                waypts.push({
+                    location:new google.maps.LatLng({{ milestone.latitude|safe }}, {{ milestone.longitude|safe }}),
+                    stopover:true});
                 markers.push({
-                    position: new google.maps.LatLng({{ segment.end_milestone.latitude|safe }}, {{ segment.end_milestone.longitude|safe }}),
+                    position: new google.maps.LatLng({{ milestone.latitude|safe }}, {{ milestone.longitude|safe }}),
                     map: map,
-                    title: '{{ segment }}',
-                    image: '{{ segment.photo.url }}',
-                    date: '{{ segment.end_date }}',
-                    slug: '{{ segment.slug }}',
-                    data: '{{ segment.text|escapejs }}'});
+                    title: '{{ milestone.name }}',
+                    image: '{{ milestone.photos.first.photo.url }}',
+                    date: '{{ milestone.arrival_date }}',
+                    slug: '{{ milestone.slug }}',
+                    data: '{{ milestone.text|markdown|escapejs }}'});
             {% endfor %}
-            latitude_depart = {{ segment_list.first.start_milestone.latitude|safe }};
-            longitude_depart = {{ segment_list.first.start_milestone.longitude|safe }};
-            latitude_arrivee = {{ segment_list.last.end_milestone.latitude|safe }};
-            longitude_arrivee = {{ segment_list.last.end_milestone.longitude|safe }};
+            latitude_depart = {{ milestone_list.first.latitude|safe }};
+            longitude_depart = {{ milestone_list.first.longitude|safe }};
+            latitude_arrivee = {{ milestone_list.last.latitude|safe }};
+            longitude_arrivee = {{ milestone_list.last.longitude|safe }};
             var request = {
                 origin: new google.maps.LatLng(latitude_depart,longitude_depart,17),
                 destination: new google.maps.LatLng(latitude_arrivee,longitude_arrivee,17),
@@ -176,10 +182,12 @@
                     return function() {
                         console.log(markers[i]['slug']);
                         infowindow.setContent('<div id="content">' +
-                        '<h2 id="firstHeading" class="firstHeading">' + markers[i]['title'] + ' <small>le ' + markers[i]['date'] + '</small></h2>' +
-                        '<img src="' + markers[i]['image'] +'" style="width:100px;float:left;margin:0 10px 10px 0;"">' +
-                        '<div id="bodyContent" style="text-align: justify;">' + markers[i]['data'] + '</div>'+
-                        '<p class="text-warning">Pour laisser un commentaire, clique sur cette étape dans la liste de gauche !</p>' + '</div>');
+                        '<h2 id="firstHeading" class="firstHeading">' + markers[i]['title'] + ' <small>' + markers[i]['date'] + '</small></h2>');
+                        if (markers[i]['image']){
+                            infowindow.setContent(infowindow.getContent() + '<img src="' + markers[i]['image'] +'" style="width:100px;float:left;margin:0 10px 10px 0;"">');
+                        }
+                        infowindow.setContent(infowindow.getContent() + '<div id="bodyContent" style="text-align: justify;">' + markers[i]['data'] + '</div>'+
+                        '<p class="text-warning">Pour voir toutes les images et laisser un commentaire, clique sur cette étape dans la liste de gauche !</p>' + '</div>');
                         infowindow.open(map, marker);
                     }
                 })(marker, i));

@@ -31,14 +31,21 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    # Admin with django-suit app
+    'suit',
+    # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Custom apps
+    # Project apps
     'travel',
+    # Additionnal apps
+    'django_markdown',
+    'pytz',
+    'geopy',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -87,7 +94,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'fr-fr'
+LANGUAGE_CODE = 'en-en'
 
 TIME_ZONE = 'Europe/Paris'
 
@@ -102,13 +109,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = (
-    os.path.join(BASE_DIR, 'static')
-)
+# STATIC_ROOT = (
+#     os.path.join(BASE_DIR, '/static/'),
+# )
 STATICFILES_DIRS = (
-    # os.path.join(BASE_DIR, "travel/static"),
+    os.path.join(BASE_DIR, "static"),
 )
 # Media files
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Django Suit conf
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'Destination Australia'
+}
