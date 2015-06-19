@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'pytz',
     'geopy',
     'django_mailbox',
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
