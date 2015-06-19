@@ -13,3 +13,6 @@ h2 {
 a.list-group-item {
     min-height: 90px;
 }
+.modal-body {
+    padding: 0 20px 0 20px;
+}
