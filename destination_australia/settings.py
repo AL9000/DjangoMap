@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'django_markdown',
     'pytz',
     'geopy',
+    'django_mailbox',
 )
 
 MIDDLEWARE_CLASSES = (

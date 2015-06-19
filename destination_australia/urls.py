@@ -8,5 +8,7 @@ urlpatterns = [
 
     url('^markdown/', include('django_markdown.urls')),
 
+    url('', include('social.apps.django_app.urls', namespace='social')),
+
     url(r'^admin/', include(admin.site.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # TODO Remove for production
