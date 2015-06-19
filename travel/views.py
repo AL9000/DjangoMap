@@ -6,11 +6,12 @@ from django.shortcuts import get_object_or_404, HttpResponseRedirect
 
 class HomeView(ListView):
     model = Milestone
+    ordering = '-arrival_date'
 
 
 class CommentCreate(CreateView):
     model = Comment
-    fields = ['content', 'user']
+    fields = ['alias', 'content']
 
     def get_success_url(self):
         return reverse("travel:home")

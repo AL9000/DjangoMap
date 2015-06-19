@@ -10,48 +10,49 @@ class PhotoInline(admin.TabularInline):
     extra = 3
 
 
+class CommentInline(admin.TabularInline):
+    model = Comment
+
+
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'get_arrival_date', 'get_photo']
+    list_display = ['milestone', 'arrival_date', 'thumbnail', ]
+    search_fields = ['milestone__title', ]
 
-    def get_arrival_date(self, obj):
+    def arrival_date(self, obj):
         return obj.milestone.arrival_date
-    get_arrival_date.short_description = 'arrival date'
+    arrival_date.short_description = "date d'arrivée"
 
-    def get_photo(self, obj):
-        return '<img src="%s" style="width:125px;"/>' % obj.photo.url
-    get_photo.short_description = 'thumbnail'
-    get_photo.allow_tags = True
+    def thumbnail(self, obj):
+        return '<a href="%s"><img src="%s" style="width:125px;"/></a>' % (obj.photo.url, obj.photo.url)
+    thumbnail.allow_tags = True
+    thumbnail.short_description = "miniature"
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['user', 'content', 'get_milestone', 'pub_date', ]
+    list_display = ['alias', 'content', 'milestone', 'pub_date', ]
     ordering = ['-pub_date', ]
-
-    def get_milestone(self, obj):
-        return obj.milestone
-    get_milestone.short_description = 'milestone'
+    search_fields = ['alias', 'content', 'pub_date', 'milestone__title', ]
 
 
 class MilestoneAdmin(MarkdownModelAdmin):
-    prepopulated_fields = {"slug": ("name",)}
-    inlines = [PhotoInline, ]
+    inlines = [PhotoInline, CommentInline, ]
     formfield_overrides = {TextField: {'widget': AdminMarkdownWidget}}
-    list_display = ['name', 'arrival_date', 'display_text', 'get_photo', ]
-    search_fields = ['name', 'text']
+    list_display = ['title', 'arrival_date', 'text_overview', 'thumbnail', ]
+    search_fields = ['title', 'text']
     date_hierarchy = 'arrival_date'
     ordering = ['-arrival_date', ]
 
-    def display_text(self, obj):
+    def text_overview(self, obj):
         if len(obj.text) > 40:
             return obj.text[0:40] + '...'
         return obj.text
-    display_text.short_description = 'text overview'
+    text_overview.short_description = "aperçu du texte"
 
-    def get_photo(self, obj):
-        return '<img src="%s" style="width:125px;"/>' % obj.photos  # TODO Don't know why this
+    def thumbnail(self, obj):
+        return '<img src="%s" style="width:125px;"/>' % obj.photos.first  # TODO Don't know why this
         # (with obj.photos.first.url) doesn't work
-    get_photo.short_description = 'thumbnail'
-    get_photo.allow_tags = True
+    thumbnail.allow_tags = True
+    thumbnail.short_description = "miniature"
 
 
 admin.site.register(Milestone, MilestoneAdmin)
