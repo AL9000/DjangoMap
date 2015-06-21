@@ -9,7 +9,7 @@ class Milestone(models.Model):
     title = models.CharField(max_length=100, verbose_name="titre")
     latitude = models.FloatField(editable=False)
     longitude = models.FloatField(editable=False)
-    arrival_date = models.DateTimeField(verbose_name="date d'arrivée")
+    arrival_date = models.DateField(verbose_name="date d'arrivée")
     text = MarkdownField(verbose_name="texte")
     video = models.URLField(blank=True)
 
