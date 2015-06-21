@@ -37,10 +37,16 @@ class CommentAdmin(admin.ModelAdmin):
 class MilestoneAdmin(MarkdownModelAdmin):
     inlines = [PhotoInline, CommentInline, ]
     formfield_overrides = {TextField: {'widget': AdminMarkdownWidget}}
-    list_display = ['title', 'arrival_date', 'text_overview', 'thumbnail', ]
+    list_display = ['title', 'arrival_date', 'text_overview', 'lien_video', 'thumbnail', ]
     search_fields = ['title', 'text']
     date_hierarchy = 'arrival_date'
     ordering = ['-arrival_date', ]
+
+    def lien_video(self, obj):
+        if obj.video:
+            return True
+        return False
+    lien_video.boolean = True
 
     def text_overview(self, obj):
         if len(obj.text) > 40:
