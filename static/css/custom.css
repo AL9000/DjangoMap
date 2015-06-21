@@ -6,6 +6,8 @@ body, html, #map {
     margin: 0;
     padding: 0;
     text-align: center;
+    z-index: 0;
+    color: #FB7064;
 }
 h2 {
     margin: 0 0 10px 0;
@@ -13,6 +15,49 @@ h2 {
 a.list-group-item {
     min-height: 90px;
 }
+.list-group-item {
+    padding: 10px 10px;
+}
+.list-group-item p {
+    margin: 0;
+}
+.list-group {
+    margin-bottom: 0;
+}
 .modal-body {
     padding: 0 20px 0 20px;
+}
+#swag {
+    margin: 0;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+}
+.colorCycle {
+    padding-top: 5px; padding-right: 7px; padding-bottom: 7px; padding-left: 7px;
+    text-align: center;
+    animation-name: homeCycle;
+    animation-duration:6s;
+    animation-direction:alternate;
+    animation-iteration-count:infinite;
+
+    -webkit-animation-name: homeCycle;
+    -webkit-animation-duration:6s;
+    -webkit-animation-direction:alternate;
+    -webkit-animation-iteration-count:infinite; }
+
+@keyframes homeCycle
+{
+    0% {color:#006;}
+    25% {color:#060;}
+    50% {color:#CC3200;}
+    75% {color:#603;}
+}
+
+@-webkit-keyframes homeCycle
+{
+    0% {color:#006;}
+    25% {color:#060;}
+    50% {color:#CC3200;}
+    75% {color:#603;}
 }
