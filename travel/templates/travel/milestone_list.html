@@ -28,23 +28,20 @@
 </head>
 <body>
 <div class="row" style="height: 100%;margin: 0 !important;padding: 0 !important;">
-    <div class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;overflow-y:auto;height: 100%;">
-        <h1 class="travel_title" style="color: #FB7064;">Destination Australie</h1>
-        <h2 class="travel_title">Étapes</h2>
-        <p class="text-info text-justify">Tu peux voir nos notes en cliquant sur les marqueurs de la carte. Mais si tu
-            veux voir toutes les photos, les vidéos et les commentaires, c'est dans la liste ci-dessous ! Ecris nous ça
-            fait toujours plaisir ;-) Love</p>
+    <div class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;height: 100%;overflow-y:auto;">
+        <h1 class="travel_title">Destination Australie</h1>
+        <p class="text-info text-justify" style="margin: 10px;">Tu peux voir nos notes en cliquant sur les marqueurs de la carte ou dans la liste en dessous. Ecris nous ça fait toujours plaisir ;-) Love</p>
         <div class="list-group">
             {% for milestone in milestone_list %}
-                <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">
-                    {% if milestone.photos.first.photo %}
-                        <img src="{{ milestone.photos.first.photo.url }}" style="height: 70px;{% if forloop.counter|divisibleby:'2' %}float:left;margin-right: 5px;{% else %}float:right;margin-left: 5px;{% endif %}">
-                    {% endif %}
+                <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal{{ forloop.counter0 }}">
                     <h4 class="list-group-item-heading">{{ milestone }} <small> {{ milestone.arrival_date }}</small></h4>
+                    {% if milestone.photos.first.photo %}
+                        <img src="{{ milestone.photos.first.photo.url }}" style="height: 70px;{% if forloop.counter0|divisibleby:'2' %}float:left;margin-right: 5px;{% else %}float:right;margin-left: 5px;{% endif %}">
+                    {% endif %}
                     <p class="list-group-item-text text-justify">{{ milestone.text|truncatechars:'100'|markdown }}</p>
                 </a>
                 <!-- Modal -->
-                <div class="modal fade" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="myModal{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -61,7 +58,7 @@
 
                                 {% if milestone.video %}
                                     <h4>Vidéo</h4>
-                                    <p>Si c'est de la zic, c'est à écouter en lisant nos notes, ça donne le ton :-)</p>
+                                    <p>Si c'est de la zic, c'est à écouter en lisant nos notes, pour l'ambiance ;-)</p>
                                     <iframe width="100%" height="330px" src="{{ milestone.video }}" frameborder="0" allowfullscreen></iframe>
                                 {% endif %}
 
@@ -98,13 +95,13 @@
                                                 <div class="form-group">
                                                     <label for="alias" class="col-lg-2 control-label">Ton nom</label>
                                                     <div class="col-lg-10">
-                                                        <input id="alias" type="text" name="alias" class="form-control" >
+                                                        <input id="alias" type="text" name="alias" class="form-control" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="content" class="col-lg-2 control-label">Message</label>
                                                     <div class="col-lg-10">
-                                                        <textarea id="content" name="content" class="form-control" rows="3"></textarea>
+                                                        <textarea id="content" name="content" class="form-control" rows="3" required></textarea>
                                                     </div>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary form-control">Commenter</button>
@@ -120,6 +117,7 @@
                     </div>
                 </div>
             {% endfor %}
+            <p id="swag"><span class="glyphicon glyphicon-heart colorCycle" aria-hidden="true"></span> Site fait avec amour par <a href="https://github.com/Al-Ouest" target="_blank">Al Ouest</a> <span class="glyphicon glyphicon-heart colorCycle" aria-hidden="true"></span></p>
         </div>
     </div>
     <div class="col-sm-8 col-md-9" style="height: 100%;margin: 0 !important;padding: 0 !important;">
@@ -170,14 +168,15 @@
                 bounds.extend(marker.position);
                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
                     return function() {
-                        infowindow.setContent('<div id="content">' +
+                        {% comment %}infowindow.setContent('<div id="content">' +
                         '<h2 id="firstHeading" class="firstHeading">' + markers[i]['title'] + ' <small>le ' + markers[i]['date'] + '</small></h2>');
                         if (markers[i]['image']){
                             infowindow.setContent(infowindow.getContent() + '<img src="' + markers[i]['image'] +'" style="width:100px;float:left;margin:0 10px 10px 0;"">');
                         }
                         infowindow.setContent(infowindow.getContent() + '<div id="bodyContent" style="text-align: justify;font-size: 15px;">' + markers[i]['data'] + '</div>'+
                         '<p class="text-muted">Pour voir toutes les images et laisser un commentaire, clique sur cette étape dans la liste de gauche !</p>' + '</div>');
-                        infowindow.open(map, marker);
+                        infowindow.open(map, marker);{% endcomment %}
+                        $('#myModal'+i).modal();
                     }
                 })(marker, i));
             }
