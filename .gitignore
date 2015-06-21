@@ -67,3 +67,6 @@ static/
 
 # media files
 media/
+
+# venv
+venv_travel/
