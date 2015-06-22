@@ -13,13 +13,14 @@ h2 {
     margin: 0 0 10px 0;
 }
 a.list-group-item {
-    min-height: 90px;
+    min-height: 115px;
 }
 .list-group-item {
     padding: 10px 10px;
 }
 .list-group-item p {
     margin: 0;
+    line-height: 1.2;
 }
 .list-group {
     margin-bottom: 0;
