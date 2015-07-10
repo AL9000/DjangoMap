@@ -2,7 +2,30 @@ from django.db import models
 from django.utils.text import slugify
 from django_markdown.models import MarkdownField
 import itertools
+import os
 from geopy.geocoders import GoogleV3
+from django_mailbox.signals import message_received
+from django.dispatch import receiver
+from datetime import datetime
+from destination_australia import settings
+
+
+@receiver(message_received)
+def create_milestone(sender, message, **args):
+    print(message.from_address)
+    if message.from_address[0] in settings.VERIFIED_TRAVELLERS:
+        print("Verified traveller, now creating milestone.")
+        milestone = Milestone()
+        if message.attachments.all():
+            print("There is attachment(s) to this mail.")
+            for attachment in message.attachments.all():
+                # TODO Ca ne fonctionne pas putain de bordel de merde
+                print(attachment.document)
+                milestone.photos.add(attachment.document)
+        milestone.title = message.subject
+        milestone.arrival_date = datetime.now()
+        milestone.text = message.text
+        milestone.save()
 
 
 class Milestone(models.Model):
@@ -41,6 +64,7 @@ class Comment(models.Model):
     content = models.TextField(verbose_name="contenu")
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name="date de publication")
     milestone = models.ForeignKey(Milestone, related_name='comments', verbose_name="étapes")
+    photo = models.ImageField(upload_to='photos/comments/', null=True)
 
     class Meta:
         verbose_name = "commentaire"
@@ -51,7 +75,7 @@ class Comment(models.Model):
 
 
 class Photo(models.Model):
-    photo = models.ImageField(upload_to='photos/')
+    photo = models.ImageField(upload_to='photos/milestone/')
     milestone = models.ForeignKey(Milestone, related_name='photos', verbose_name="étapes")
 
     def __str__(self):

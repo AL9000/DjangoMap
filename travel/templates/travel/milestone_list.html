@@ -34,7 +34,10 @@
         <div class="list-group">
             {% for milestone in milestone_list %}
                 <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal{{ forloop.counter0 }}">
-                    <h4 class="list-group-item-heading">{{ milestone }} <small> {{ milestone.arrival_date }}</small></h4>
+                    {% if milestone.comments.all %}
+                        <span class="badge">{{ milestone.comments.count }}</span>
+                    {% endif %}
+                    <h4 class="list-group-item-heading" style="color: #FB7064;">{{ milestone }} <small> {{ milestone.arrival_date }}</small></h4>
                     {% if milestone.photos.first.photo %}
                         <img src="{{ milestone.photos.first.photo.url }}" style="height: 70px;{% if forloop.counter0|divisibleby:'2' %}float:left;margin-right: 5px;{% else %}float:right;margin-left: 5px;{% endif %}">
                     {% endif %}
@@ -46,7 +49,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h3 class="modal-title" id="myModalLabel">{{ milestone }} <small>le {{ milestone.arrival_date }}</small></h3>
+                                <h3 class="modal-title" id="myModalLabel" style="color: #FB7064;">{{ milestone }} <small>le {{ milestone.arrival_date }}</small></h3>
                             </div>
                             <div class="modal-body">
                                 {% if milestone.photos.all %}
@@ -67,17 +70,28 @@
                                     <p>{{ milestone.text|markdown }}</p>
                                 </div>
                                 <hr>
-                                {% if milestone.comments.all.count > 0 %}
+                                {% if milestone.comments.all %}
                                     <h4>Commentaires</h4>
                                     {% for comment in milestone.comments.all %}
                                         <div class="well well-sm" style="font-size: 14px;">
-                                            <p class="small text-muted">Commentaire posté par <b class="text-primary">{{ comment.alias }}</b> le {{ comment.pub_date }}</p>
-                                            <p>{{ comment.content|markdown }}</p>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p class="small text-muted">Commentaire posté par <b class="text-primary">{{ comment.alias }}</b> le {{ comment.pub_date }}</p>
+                                                </div>
+                                                {% if comment.photo %}
+                                                <div class="col-md-3">
+                                                    <img src="{{ comment.photo.url }}" style="width: 130px;">
+                                                </div>
+                                                {% endif %}
+                                                <div class="col-md-9">
+                                                    <p>{{ comment.content|markdown }}</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     {% endfor %}
                                 {% endif %}
                                 {# TODO Handle form error in same page #}
-                                <form method="post" action="{% url 'travel:milestone_comment' milestone.slug %}" class="form-horizontal">
+                                <form enctype="multipart/form-data" method="post" action="{% url 'travel:milestone_comment' milestone.slug %}" class="form-horizontal">
                                     {% if form.subject.errors %}
                                         <ol>
                                             {% for error in form.subject.errors %}
@@ -102,6 +116,12 @@
                                                     <label for="content" class="col-lg-2 control-label">Message</label>
                                                     <div class="col-lg-10">
                                                         <textarea id="content" name="content" class="form-control" rows="3" required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="photo" class="col-lg-2 control-label">Photo</label>
+                                                    <div class="col-lg-10">
+                                                        <input type="file" id="photo" name="photo" class="form-control" rows="3" />
                                                     </div>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary form-control">Commenter</button>
@@ -136,12 +156,12 @@
 <script>
     function initialize() {
         var bounds = new google.maps.LatLngBounds();
-        var styles = [{"stylers":[{"hue":"#007fff"},{"saturation":89}]},{"featureType":"water","stylers":[{"color":"#ffffff"}]},{"featureType":"administrative.country","elementType":"labels","stylers":[{"visibility":"on"}]}];
+        //var styles = [{"stylers":[{"hue":"#007fff"},{"saturation":89}]},{"featureType":"water","stylers":[{"color":"#ffffff"}]},{"featureType":"administrative.country","elementType":"labels","stylers":[{"visibility":"on"}]}];
         var myOptions = {
             zoom: 15
         };
         var map = new google.maps.Map(document.getElementById("map"), myOptions);
-        map.setOptions({styles: styles});
+        //map.setOptions({styles: styles});
         var markers = [];
 
         displayMarkers();
