@@ -163,30 +163,26 @@
         var map = new google.maps.Map(document.getElementById("map"), myOptions);
         //map.setOptions({styles: styles});
 
-        var mark, i, marker, travelPlanCoordinates = [];
+        var marker, travelPlanCoordinates = [];
         {% for milestone in milestone_list %}
 
-            mark = new google.maps.Marker({
+            marker = new google.maps.Marker({
                 position: new google.maps.LatLng({{ milestone.latitude|safe }}, {{ milestone.longitude|safe }}),
                 map: map,
-                title: '{{ milestone.title }}',
-                image: '{{ milestone.photos.first.photo.url }}',
-                date: '{{ milestone.arrival_date }}',
-                slug: '{{ milestone.slug }}',
-                data: '{{ milestone.text|markdown|escapejs }}'
+                title: '{{ milestone.title }}'
             });
 
-            google.maps.event.addListener(mark, 'click', (function(marker) {
+            google.maps.event.addListener(marker, 'click', (function(marker) {
                 return function() {
                     $('#myModal'+{{ forloop.counter0 }}).modal();
                 }
             })(marker));
 
             travelPlanCoordinates.push(
-                    mark.position
+                    marker.position
             );
 
-            bounds.extend(mark.position);
+            bounds.extend(marker.position);
         {% endfor %}
 
         var travelPath = new google.maps.Polyline({
