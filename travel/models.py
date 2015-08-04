@@ -64,7 +64,7 @@ class Comment(models.Model):
     content = models.TextField(verbose_name="contenu")
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name="date de publication")
     milestone = models.ForeignKey(Milestone, related_name='comments', verbose_name="étapes")
-    photo = models.ImageField(upload_to='photos/comments/', null=True)
+    photo = models.ImageField(upload_to='photos/comments/', blank=True)
 
     class Meta:
         verbose_name = "commentaire"
