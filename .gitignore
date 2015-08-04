@@ -69,4 +69,4 @@ static/
 media/
 
 # venv
-venv_travel/
+venv_djangomap/
