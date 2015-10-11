@@ -76,6 +76,7 @@ class Comment(models.Model):
 
 class Photo(models.Model):
     photo = models.ImageField(upload_to='photos/milestone/')
+    legend = models.TextField(verbose_name="legend", blank=True)
     milestone = models.ForeignKey(Milestone, related_name='photos', verbose_name="étapes")
 
     def __str__(self):
