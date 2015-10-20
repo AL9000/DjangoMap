@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import TextField
 from django_markdown.admin import MarkdownModelAdmin
 from django_markdown.widgets import AdminMarkdownWidget
-from travel.models import Milestone, Photo, Comment
+from travel.models import Milestone, Photo, Comment, Video
 
 
 class PhotoInline(admin.TabularInline):
@@ -12,6 +12,11 @@ class PhotoInline(admin.TabularInline):
 
 class CommentInline(admin.TabularInline):
     model = Comment
+
+
+class VideoInline(admin.TabularInline):
+    model = Video
+    extra = 2
 
 
 class PhotoAdmin(admin.ModelAdmin):
@@ -34,8 +39,14 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ['alias', 'content', 'pub_date', 'milestone__title', ]
 
 
+class VideoAdmin(admin.ModelAdmin):
+    list_display = ['milestone', ]
+    search_fields = ['milestone__title', ]
+    ordering = ['-milestone__arrival_date', ]
+
+
 class MilestoneAdmin(MarkdownModelAdmin):
-    inlines = [PhotoInline, CommentInline, ]
+    inlines = [PhotoInline, VideoInline, CommentInline, ]
     formfield_overrides = {TextField: {'widget': AdminMarkdownWidget}}
     list_display = ['title', 'arrival_date', 'text_overview', 'lien_video', 'thumbnail', ]
     search_fields = ['title', 'text']
@@ -43,7 +54,7 @@ class MilestoneAdmin(MarkdownModelAdmin):
     ordering = ['-arrival_date', ]
 
     def lien_video(self, obj):
-        if obj.video:
+        if obj.videos.exists():
             return True
         return False
     lien_video.boolean = True
@@ -64,3 +75,4 @@ class MilestoneAdmin(MarkdownModelAdmin):
 admin.site.register(Milestone, MilestoneAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(Video, VideoAdmin)

@@ -60,10 +60,13 @@
                                     {% endfor %}
                                 {% endif %}
 
-                                {% if milestone.video %}
+                                {% if milestone.videos %}
                                     <h4>Vidéo</h4>
                                     <p>Si c'est de la zic, c'est à écouter en lisant nos notes, pour l'ambiance ;-)</p>
-                                    <iframe width="100%" height="330px" src="{{ milestone.video }}" frameborder="0" allowfullscreen></iframe>
+                                    {%  for video in milestone.videos.all %}
+                                        <iframe width="100%" height="330px" src="{{ video.video }}" frameborder="0" allowfullscreen></iframe>
+                                        <p style="text-align: center;"><i>{{ video.legend }}</i></p>
+                                    {% endfor %}
                                 {% endif %}
 
                                 <h4>Note</h4>

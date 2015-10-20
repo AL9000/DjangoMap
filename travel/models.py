@@ -34,7 +34,6 @@ class Milestone(models.Model):
     longitude = models.FloatField(editable=False)
     arrival_date = models.DateTimeField(verbose_name="date d'arrivée")
     text = MarkdownField(verbose_name="texte")
-    video = models.URLField(blank=True)
 
     slug = models.SlugField(max_length=100, unique=True, editable=False)
 
@@ -81,3 +80,13 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.milestone.title
+
+
+class Video(models.Model):
+    video = models.URLField(blank=True)
+    legend = models.TextField(verbose_name="legend", blank=True)
+    milestone = models.ForeignKey(Milestone, related_name='videos', verbose_name="étapes")
+
+    def save(self, *args, **kwargs):
+        self.video = self.video.replace('watch?v=', 'embed/')
+        super(Video, self).save(*args, **kwargs)
