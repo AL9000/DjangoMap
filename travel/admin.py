@@ -66,8 +66,8 @@ class MilestoneAdmin(MarkdownModelAdmin):
     text_overview.short_description = "aperçu du texte"
 
     def thumbnail(self, obj):
-        return '<img src="%s" style="width:125px;"/>' % obj.photos.first  # TODO Don't know why this
-        # (with obj.photos.first.url) doesn't work
+        if obj.photos.exists():
+            return '<img src="%s" style="width:125px;"/>' % obj.photos.first().photo.url
     thumbnail.allow_tags = True
     thumbnail.short_description = "miniature"
 
