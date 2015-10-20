@@ -39,7 +39,7 @@
                     {% endif %}
                     <h4 class="list-group-item-heading" style="color: #FB7064;">{{ milestone }} <small> {{ milestone.arrival_date|date:"d N Y" }}</small></h4>
                     {% if milestone.photos.first.photo %}
-                        <img src="{{ milestone.photos.first.photo.url }}" style="height: 70px;{% if forloop.counter0|divisibleby:'2' %}float:left;margin-right: 5px;{% else %}float:right;margin-left: 5px;{% endif %}">
+                        <img src="{{ milestone.photos.first.photo.url }}" style="height: 70px;max-width: 100%;{% if forloop.counter0|divisibleby:'2' %}float:left;margin-right: 5px;{% else %}float:right;margin-left: 5px;{% endif %}">
                     {% endif %}
                     <p class="list-group-item-text text-justify">{{ milestone.text|truncatechars:'100'|markdown }}</p>
                 </a>
