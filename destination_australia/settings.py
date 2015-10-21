@@ -31,8 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    # Admin with django-suit app
-    'suit',
+    # Admin with Grappelli
+    'grappelli',
     # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,8 +46,8 @@ INSTALLED_APPS = (
     'django_markdown',
     'pytz',
     'geopy',
-    'django_mailbox',
-    'social.apps.django_app.default',
+    #'django_mailbox',
+    #'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -122,7 +122,5 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# Django Suit conf
-SUIT_CONFIG = {
-    'ADMIN_NAME': 'Destination Australia'
-}
+# Django Grappelli conf
+GRAPPELLI_ADMIN_TITLE = 'Destination Australia'
