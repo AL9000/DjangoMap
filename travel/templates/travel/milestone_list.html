@@ -30,9 +30,13 @@
 <div class="row" style="height: 100%;margin: 0 !important;padding: 0 !important;">
     <div class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;height: 100%;overflow-y:auto;">
         <h1 class="travel_title">Destination Australie</h1>
-        <p class="text-info text-justify" style="margin: 10px;">Tu peux voir nos notes en cliquant sur les marqueurs de la carte ou dans la liste en dessous. Ecris nous ça fait toujours plaisir ;-) Love</p>
+        <p class="text-info text-justify" style="margin: 10px;">Le site de notre voyage ! Our travel site !</p>
+        <div id="feeds" style="margin: 10px;">
+            Suis-nous ! Follow us !
+            <a href="/latest/feed/" style="float:right;" target="_blank"><img src="{% static 'images/feed-icon-64x64.png' %}" height="20px"/></a>
+        </div>
         <div class="list-group">
-            {% for milestone in milestone_list %}
+            {% for milestone in completed_objects %}
                 <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal{{ forloop.counter0 }}">
                     {% if milestone.comments.all %}
                         <span class="badge">{{ milestone.comments.count }}</span>
@@ -60,7 +64,7 @@
                                     {% endfor %}
                                 {% endif %}
 
-                                {% if milestone.videos %}
+                                {% if milestone.videos.all %}
                                     <h4>Vidéo</h4>
                                     <p>Si c'est de la zic, c'est à écouter en lisant nos notes, pour l'ambiance ;-)</p>
                                     {%  for video in milestone.videos.all %}
@@ -168,7 +172,7 @@
         //map.setOptions({styles: styles});
 
         var marker, travelPlanCoordinates = [];
-        {% for milestone in milestone_list %}
+        {% for milestone in completed_objects %}
 
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng({{ milestone.latitude|safe }}, {{ milestone.longitude|safe }}),

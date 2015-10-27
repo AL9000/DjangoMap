@@ -9,6 +9,11 @@ class HomeView(ListView):
     model = Milestone
     ordering = '-arrival_date'
 
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        context['completed_objects'] = Milestone.completed_objects.all().order_by('-arrival_date')
+        return context
+
 
 class CommentCreate(CreateView):
     model = Comment

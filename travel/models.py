@@ -28,14 +28,27 @@ def create_milestone(sender, message, **args):
         milestone.save()
 
 
+class CompletedMilestoneManager(models.Manager):
+    def get_queryset(self):
+        return super(CompletedMilestoneManager, self).get_queryset().exclude(draft=True)
+
+
 class Milestone(models.Model):
     title = models.CharField(max_length=100, verbose_name="titre")
     latitude = models.FloatField(editable=False)
     longitude = models.FloatField(editable=False)
     arrival_date = models.DateTimeField(verbose_name="date d'arrivée")
     text = MarkdownField(verbose_name="texte")
+    draft = models.BooleanField('Brouillon ?', default=False, help_text="Les brouillons ne seront pas publiés.")
 
     slug = models.SlugField(max_length=100, unique=True, editable=False)
+
+    objects = models.Manager()
+
+    completed_objects = CompletedMilestoneManager()
+
+    def get_absolute_url(self):
+        return ''
 
     class Meta:
         verbose_name = "étape"
@@ -51,7 +64,8 @@ class Milestone(models.Model):
         location = geolocator.geocode(self.title)
         self.latitude = location.latitude
         self.longitude = location.longitude
-        self.video = self.video.replace('watch?v=', 'embed/')
+        if hasattr(self, 'video'):
+            self.video = self.video.replace('watch?v=', 'embed/')
         super(Milestone, self).save(*args, **kwargs)
 
     def __str__(self):

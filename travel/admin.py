@@ -48,8 +48,8 @@ class VideoAdmin(admin.ModelAdmin):
 class MilestoneAdmin(MarkdownModelAdmin):
     inlines = [PhotoInline, VideoInline, CommentInline, ]
     formfield_overrides = {TextField: {'widget': AdminMarkdownWidget}}
-    list_display = ['title', 'arrival_date', 'text_overview', 'lien_video', 'thumbnail', ]
-    search_fields = ['title', 'text']
+    list_display = ['title', 'arrival_date', 'text_overview', 'lien_video', 'thumbnail', 'draft', ]
+    search_fields = ['title', 'text', 'draft', ]
     date_hierarchy = 'arrival_date'
     ordering = ['-arrival_date', ]
 
