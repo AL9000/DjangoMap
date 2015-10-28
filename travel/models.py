@@ -28,6 +28,7 @@ def create_milestone(sender, message, **args):
         milestone.save()
 
 
+# This manager exclude draft milestones
 class CompletedMilestoneManager(models.Manager):
     def get_queryset(self):
         return super(CompletedMilestoneManager, self).get_queryset().exclude(draft=True)
@@ -43,8 +44,9 @@ class Milestone(models.Model):
 
     slug = models.SlugField(max_length=100, unique=True, editable=False)
 
+    # This is the default manager, we keep this one for the admin
     objects = models.Manager()
-
+    # We use our custom manager to display only completed milestones on the website
     completed_objects = CompletedMilestoneManager()
 
     def get_absolute_url(self):
