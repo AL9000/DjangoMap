@@ -70,3 +70,6 @@ media/
 
 # venv
 venv_djangomap/
+
+# ropeproject ???
+.ropeproject/
