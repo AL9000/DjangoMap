@@ -28,10 +28,10 @@
 </head>
 <body>
 <div class="row" style="height: 100%;margin: 0 !important;padding: 0 !important;">
-    <div class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;height: 100%;overflow-y:auto;">
+    <div id="milestone_container" class="col-sm-4 col-md-3" style="margin-top: 0 !important;padding: 2px !important;height: 100%;overflow-y:auto;">
         <h1 class="travel_title">Destination Australie</h1>
-        <p class="text-info text-justify" style="margin: 10px;">Un court texte de présentation du site, à rendre modifiable dans l'admin.</p>
-        <p class="text-warning text-justify" style="margin: 10px;"><a href="/latest/feed/" target="_blank"><img src="{% static 'images/feed-icon-64x64.png' %}" height="20px"/></a></p>
+        <p class="text-info text-justify" style="margin: 1px 5px 1px 5px;">Un court texte de présentation du site, à rendre modifiable dans l'admin.</p>
+        <p class="text-warning text-justify" style="margin: 1px 5px 5px 5px;"><a href="/latest/feed/" target="_blank"><img src="{% static 'images/feed-icon-64x64.png' %}" height="20px"/></a></p>
         <div class="list-group">
             {% for milestone in completed_objects %}
                 <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal{{ forloop.counter0 }}">
@@ -145,7 +145,7 @@
             <p id="swag">Site fait avec amour par <a href="https://github.com/Al-Ouest" target="_blank">Al Ouest</a> <span class="glyphicon glyphicon-heart colorCycle" aria-hidden="true"></span></p>
         </div>
     </div>
-    <div class="col-sm-8 col-md-9" style="height: 100%;margin: 0 !important;padding: 0 !important;">
+    <div id="map_container" class="col-sm-8 col-md-9" style="height: 100%;margin: 0 !important;padding: 0 !important;">
         <div id="map"></div>
     </div>
 </div>
