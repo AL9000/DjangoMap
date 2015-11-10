@@ -40,7 +40,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ['milestone', ]
+    list_display = ['milestone', 'legend', 'video', ]
     search_fields = ['milestone__title', ]
     ordering = ['-milestone__arrival_date', ]
 
