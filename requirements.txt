@@ -1,5 +1,6 @@
 defusedxml==0.4.1
 Django==1.8.2
+django-grappelli==2.7.1
 django-mailbox==4.3.4
 django-markdown==0.8.4
 django-suit==0.2.13
@@ -14,3 +15,4 @@ pytz==2015.4
 requests==2.7.0
 requests-oauthlib==0.5.0
 six==1.9.0
+wheel==0.24.0
