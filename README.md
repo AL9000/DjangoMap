@@ -13,6 +13,8 @@ pyenv virtualenv 3.5.10 DjangoMap3.5
 pyenv local DjangoMap3.5
 ```
 
+.python-version file at the root of the project now contains the name of the related pyenv.
+
 ## Packages
 
 As everything changes, you must install the requirements this way (check by yourself don't ask me why) :
@@ -30,4 +32,3 @@ python manage.py runserver
 
 I made some save of my old travel DB, just find it and replace the SQlite file as I used it in production (lol).
 Same for the media, the save is in the same place on gdrive.
-
