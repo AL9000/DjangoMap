@@ -32,3 +32,40 @@ python manage.py runserver
 
 I made some save of my old travel DB, just find it and replace the SQlite file as I used it in production (lol).
 Same for the media, the save is in the same place on gdrive.
+
+# TODOs
+
+## Reboot
+
+First, all this code must be cleanned.
+
+- [ ] black
+- [ ] isort
+
+Then update Python
+- [ ] python update
+
+Then update libs
+- [ ] Django
+- [ ] other libs
+
+- [ ] Check for vulnerabilities
+
+## Rework
+
+Settings rework :
+- [ ] base / dev / prod
+- [ ] BDD usage
+
+Models rework
+- [ ] tkae every good things from the TravelMap repository
+
+## Pypy
+
+- [ ] make it "app ready" as Django intend to
+- [ ] publish on pypy
+- [ ] add it to an existing project to test it in live conditions
+
+## Mobile app
+
+- [ ] create a mobile app to make it easier to CRUD travels / milestones
